@@ -1,0 +1,66 @@
+From df7bda67b8f84cf99cb7db89b11b5370794f7329 Mon Sep 17 00:00:00 2001
+From: Minghao Chi <chi.minghao@zte.com.cn>
+Date: Mon, 18 Apr 2022 06:29:21 +0000
+Subject: [PATCH 123/124] drivers: net: davinci_mdio: using
+ pm_runtime_resume_and_get instead of pm_runtime_get_sync
+
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Link: https://lore.kernel.org/r/20220418062921.2557884-1-chi.minghao@zte.com.cn
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+---
+ drivers/net/ethernet/ti/davinci_mdio.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/net/ethernet/ti/davinci_mdio.c b/drivers/net/ethernet/ti/davinci_mdio.c
+index a4efd5e35158..a63d878b442a 100644
+--- a/drivers/net/ethernet/ti/davinci_mdio.c
++++ b/drivers/net/ethernet/ti/davinci_mdio.c
+@@ -134,11 +134,9 @@ static int davinci_mdio_reset(struct mii_bus *bus)
+ 	u32 phy_mask, ver;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(data->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(data->dev);
++	ret = pm_runtime_resume_and_get(data->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	/* wait for scan logic to settle */
+ 	msleep(PHY_MAX_ADDR * data->access_time);
+@@ -232,11 +230,9 @@ static int davinci_mdio_read(struct mii_bus *bus, int phy_id, int phy_reg)
+ 	if (phy_reg & ~PHY_REG_MASK || phy_id & ~PHY_ID_MASK)
+ 		return -EINVAL;
+ 
+-	ret = pm_runtime_get_sync(data->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(data->dev);
++	ret = pm_runtime_resume_and_get(data->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	reg = (USERACCESS_GO | USERACCESS_READ | (phy_reg << 21) |
+ 	       (phy_id << 16));
+@@ -276,11 +272,9 @@ static int davinci_mdio_write(struct mii_bus *bus, int phy_id,
+ 	if (phy_reg & ~PHY_REG_MASK || phy_id & ~PHY_ID_MASK)
+ 		return -EINVAL;
+ 
+-	ret = pm_runtime_get_sync(data->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(data->dev);
++	ret = pm_runtime_resume_and_get(data->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	reg = (USERACCESS_GO | USERACCESS_WRITE | (phy_reg << 21) |
+ 		   (phy_id << 16) | (phy_data & USERACCESS_DATA));
+-- 
+2.34.1
+

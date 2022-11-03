@@ -1,7 +1,7 @@
-From 2bdb7743850b7b44bb2f9a7b79680a52642137a1 Mon Sep 17 00:00:00 2001
+From d011e05012df63874df3fadc723165b5daba5741 Mon Sep 17 00:00:00 2001
 From: "Andrew F. Davis" <afd@ti.com>
 Date: Fri, 26 Mar 2021 16:11:42 -0500
-Subject: [PATCH 064/120] soc: ti: pruss: Add
+Subject: [PATCH 064/124] soc: ti: pruss: Add
  pruss_{request,release}_mem_region() API
 
 Add two new API - pruss_request_mem_region() & pruss_release_mem_region(),
@@ -236,5 +236,5 @@ index 4d1321f0d326..f1d1197fd91a 100644
  	struct clk *iep_clk_mux;
  };
 -- 
-2.35.3
+2.34.1
 

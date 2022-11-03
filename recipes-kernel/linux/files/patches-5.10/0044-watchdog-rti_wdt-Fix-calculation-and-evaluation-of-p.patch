@@ -1,7 +1,7 @@
-From 846975e40e37df3e05159b2166c735bac842e032 Mon Sep 17 00:00:00 2001
+From 9bb0fa0c33ea06acf858b2a29aa278c0008c85e6 Mon Sep 17 00:00:00 2001
 From: Jan Kiszka <jan.kiszka@siemens.com>
 Date: Mon, 21 Feb 2022 17:22:38 +0100
-Subject: [PATCH 044/120] watchdog: rti_wdt: Fix calculation and evaluation of
+Subject: [PATCH 044/124] watchdog: rti_wdt: Fix calculation and evaluation of
  preset heartbeat
 
 This ensures that the same value is read back as was eventually
@@ -22,10 +22,10 @@ Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
  1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-index 46c2a4bd9ebe..06f9d0ee1340 100644
+index 359302f71f7e..40696a260534 100644
 --- a/drivers/watchdog/rti_wdt.c
 +++ b/drivers/watchdog/rti_wdt.c
-@@ -255,6 +255,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
+@@ -254,6 +254,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
  	}
  
  	if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
@@ -33,7 +33,7 @@ index 46c2a4bd9ebe..06f9d0ee1340 100644
  		u32 time_left_ms;
  		u64 heartbeat_ms;
  		u32 wsize;
-@@ -265,11 +266,12 @@ static int rti_wdt_probe(struct platform_device *pdev)
+@@ -264,11 +265,12 @@ static int rti_wdt_probe(struct platform_device *pdev)
  		heartbeat_ms <<= WDT_PRELOAD_SHIFT;
  		heartbeat_ms *= 1000;
  		do_div(heartbeat_ms, wdt->freq);
@@ -50,5 +50,5 @@ index 46c2a4bd9ebe..06f9d0ee1340 100644
  		wsize = readl(wdt->base + RTIWWDSIZECTRL);
  		ret = rti_wdt_setup_hw_hb(wdd, wsize);
 -- 
-2.35.3
+2.34.1
 

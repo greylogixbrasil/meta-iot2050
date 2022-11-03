@@ -1,7 +1,7 @@
-From f04f21a00cc76cca675d84edc0368baacda5604f Mon Sep 17 00:00:00 2001
+From c3043e800f2361abd04b7cc33cbf260a67669997 Mon Sep 17 00:00:00 2001
 From: Grygorii Strashko <grygorii.strashko@ti.com>
 Date: Tue, 12 Oct 2021 13:54:42 +0300
-Subject: [PATCH 107/120] net: ethernet: icssg-prueth: sr1.0: add support for
+Subject: [PATCH 107/124] net: ethernet: icssg-prueth: sr1.0: add support for
  half duplex operation
 
 This patch adds support for half duplex operation at 10M and 100M link
@@ -103,5 +103,5 @@ index 59dec45a3c86..917c6f9a2514 100644
  	/* DMA related */
  	struct prueth_tx_chn tx_chns[PRUETH_MAX_TX_QUEUES];
 -- 
-2.35.3
+2.34.1
 

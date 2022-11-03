@@ -1,7 +1,7 @@
-From bf7b479f7984ece56d2116901c5e17577b5fc929 Mon Sep 17 00:00:00 2001
+From 41c8ecf37f45f72bce63d7131e9c1f9ae88efb63 Mon Sep 17 00:00:00 2001
 From: Tero Kristo <t-kristo@ti.com>
 Date: Fri, 26 Mar 2021 15:50:14 -0500
-Subject: [PATCH 062/120] remoteproc: pru: Configure firmware based on client
+Subject: [PATCH 062/124] remoteproc: pru: Configure firmware based on client
  setup
 
 Client device node property firmware-name is now used to configure
@@ -104,5 +104,5 @@ index 90c097ebc27e..c346899d5e3b 100644
  	pru->client_np = NULL;
  	rproc->deny_sysfs_ops = false;
 -- 
-2.35.3
+2.34.1
 
