@@ -97,29 +97,16 @@ IOT2050_DEBIAN_MULTIARCH_PACKAGES = " \
 
 IMAGE_PREINSTALL += " \
     ${IOT2050_DEBIAN_DEBUG_PACKAGES} \
-    ${IOT2050_DEBIAN_WIFI_PACKAGES} \
-    ${IOT2050_DEBIAN_BT_PACKAGES} \
-    ${IOT2050_DEBIAN_ALSA_PACKAGES} \
-    ${IOT2050_DEBIAN_MULTIARCH_PACKAGES} \
     "
 
 IMAGE_INSTALL += " \
     expand-on-first-boot \
     sshd-regen-keys \
     regen-rootfs-uuid \
-    install-on-emmc \
     customizations-example \
-    switchserialmode \
-    iot2050setup \
-    iot2050-firmware-update \
-    tcf-agent \
-    mraa \
-    node-red \
-    node-red-gpio \
-    node-red-preinstalled-nodes \
     "
 
-IOT2050_CORAL_SUPPORT ?= "1"
+IOT2050_CORAL_SUPPORT ?= "0"
 
 IMAGE_INSTALL += "${@ ' \
     python3-pycoral \
