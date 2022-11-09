@@ -1,7 +1,7 @@
-From 5f799496298cd8b51949a5d0050506144ccc63f0 Mon Sep 17 00:00:00 2001
+From c0a41e9704c609cc7b70926aa24967f3f8f54485 Mon Sep 17 00:00:00 2001
 From: Suman Anna <s-anna@ti.com>
 Date: Fri, 26 Mar 2021 16:27:34 -0500
-Subject: [PATCH 065/121] soc: ti: pruss: Add pruss_cfg_read()/update() API
+Subject: [PATCH 065/150] soc: ti: pruss: Add pruss_cfg_read()/update() API
 
 Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
 the PRUSS platform driver to allow other drivers to read and program
@@ -76,16 +76,15 @@ index dc1470fa33d0..8841d85a0a0d 100644
  {
  	struct device_node *clk_mux_np = data;
 diff --git a/include/linux/pruss.h b/include/linux/pruss.h
-index 40de553d4446..a4f59a46c331 100644
+index 51800e476f53..3d841339092c 100644
 --- a/include/linux/pruss.h
 +++ b/include/linux/pruss.h
-@@ -10,12 +10,99 @@
+@@ -9,11 +9,98 @@
  #ifndef __LINUX_PRUSS_H
  #define __LINUX_PRUSS_H
  
 +#include <linux/bits.h>
  #include <linux/device.h>
- #include <linux/err.h>
  #include <linux/types.h>
  
  #define PRU_RPROC_DRVNAME "pru-rproc"
@@ -179,7 +178,7 @@ index 40de553d4446..a4f59a46c331 100644
  /*
   * enum pruss_pru_id - PRU core identifiers
   */
-@@ -73,6 +160,9 @@ int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+@@ -71,6 +158,9 @@ int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
  			     struct pruss_mem_region *region);
  int pruss_release_mem_region(struct pruss *pruss,
  			     struct pruss_mem_region *region);
@@ -189,7 +188,7 @@ index 40de553d4446..a4f59a46c331 100644
  
  #else
  
-@@ -96,6 +186,18 @@ static inline int pruss_release_mem_region(struct pruss *pruss,
+@@ -94,6 +184,18 @@ static inline int pruss_release_mem_region(struct pruss *pruss,
  	return -EOPNOTSUPP;
  }
  
@@ -209,5 +208,5 @@ index 40de553d4446..a4f59a46c331 100644
  
  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
 -- 
-2.35.3
+2.34.1
 

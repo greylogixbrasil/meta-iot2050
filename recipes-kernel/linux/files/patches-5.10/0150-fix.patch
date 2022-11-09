@@ -1,0 +1,25 @@
+From 8d3471cef1682ea884aeb8f29cedd44ab482ff1f Mon Sep 17 00:00:00 2001
+From: chao zeng <chao.zeng@siemens.com>
+Date: Thu, 10 Nov 2022 14:01:32 +0800
+Subject: [PATCH 150/150] fix
+
+Signed-off-by: chao zeng <chao.zeng@siemens.com>
+---
+ drivers/net/ethernet/ti/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/ethernet/ti/Kconfig b/drivers/net/ethernet/ti/Kconfig
+index 1d0530e7b172..717888e1083d 100644
+--- a/drivers/net/ethernet/ti/Kconfig
++++ b/drivers/net/ethernet/ti/Kconfig
+@@ -202,6 +202,7 @@ config TI_ICSSG_PRUETH
+ 	select TI_DAVINCI_MDIO
+ 	select NET_PTP_CLASSIFY
+ 	select TI_ICSS_IEP
++	select NET_DEVLINK
+ 	imply PTP_1588_CLOCK
+ 	depends on PRU_REMOTEPROC
+ 	depends on NET_SWITCHDEV
+-- 
+2.34.1
+

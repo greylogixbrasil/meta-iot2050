@@ -1,0 +1,72 @@
+From fee6ff1fa5e3c6857f664de139a049f609f4104c Mon Sep 17 00:00:00 2001
+From: Murali Karicheri <m-karicheri2@ti.com>
+Date: Thu, 8 Jul 2021 21:17:32 +0530
+Subject: [PATCH 147/150] net: ti: prueth_core: hsr/prp: set mux_sel and
+ Min/Max frame sizes
+
+As an preparatory patch to support other Ethernet types in the driver,
+driver needs to configure min/max frame sizes in MII_RT registers as
+well as MUX_SEL as part of prueth_mii_init(). It is expected that this
+function gets called in ndo_open() and Ethernet type may be different
+than EMAC or SWITCH.  So update prueth_mii_init() to configure the
+values for High Seamless Redundancy (HSR) and Parallel Redundancy
+Protocol (PRP) Ethernet types. HSR and PRP are two industrial
+protocols that operates at Layer 2 to implement redundancy. They
+extend the frame size by 6 octets of protocol bytes at Layer 2.
+Thus update the max frame size for these Ethernet types in
+MII_RT_RX_FRMS. As standard management frames are expected to be
+received as well, min frame size remains unaffected.
+Introduce a new macro PRUETH_IS_LRE() to check for HSR or PRP
+and use that to configure the Max frame value differently. Link
+Redundancy Entity (LRE) is the common function in HSR and PRP that
+implements redundancy for HSR and PRP. Also MUX_SEL reg values
+are same for HSR, PRP and SWITCH. So adjust the code accordingly.
+
+Signed-off-by: Murali Karicheri <m-karicheri2@ti.com>
+Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+---
+ drivers/net/ethernet/ti/icss_lre_firmware.h | 11 +++++++++++
+ drivers/net/ethernet/ti/icss_mii_rt.h       |  8 ++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 drivers/net/ethernet/ti/icss_lre_firmware.h
+
+diff --git a/drivers/net/ethernet/ti/icss_lre_firmware.h b/drivers/net/ethernet/ti/icss_lre_firmware.h
+new file mode 100644
+index 000000000000..272e28ce32db
+--- /dev/null
++++ b/drivers/net/ethernet/ti/icss_lre_firmware.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (C) 2017-2020 Texas Instruments Incorporated - http://www.ti.com
++ *
++ */
++
++#ifndef __ICSS_LRE_FIRMWARE_H
++#define __ICSS_LRE_FIRMWARE_H
++
++#define ICSS_LRE_TAG_RCT_SIZE                 6       /* HSR tag or PRP RCT size */
++
++#endif /* __ICSS_LRE_FIRMWARE_H */
+diff --git a/drivers/net/ethernet/ti/icss_mii_rt.h b/drivers/net/ethernet/ti/icss_mii_rt.h
+index 53a9abb458ca..bf8022ed142d 100644
+--- a/drivers/net/ethernet/ti/icss_mii_rt.h
++++ b/drivers/net/ethernet/ti/icss_mii_rt.h
+@@ -73,6 +73,14 @@
+ #define PRUSS_MII_RT_RX_FRMS_MAX_FRM_SHIFT	16
+ #define PRUSS_MII_RT_RX_FRMS_MAX_FRM_MASK	GENMASK(31, 16)
+ 
++/* Min/Max in MII_RT_RX_FRMS */
++/* For EMAC and Switch */
++#define PRUSS_MII_RT_RX_FRMS_MAX	(VLAN_ETH_FRAME_LEN + ETH_FCS_LEN)
++#define PRUSS_MII_RT_RX_FRMS_MIN_FRM	(64)
++
++/* for HSR and PRP */
++#define PRUSS_MII_RT_RX_FRMS_MAX_FRM_LRE	(PRUSS_MII_RT_RX_FRMS_MAX + \
++						 ICSS_LRE_TAG_RCT_SIZE)
+ /* PRUSS_MII_RT_RX_PCNT0/1 bits */
+ #define PRUSS_MII_RT_RX_PCNT_MIN_PCNT_SHIFT	0
+ #define PRUSS_MII_RT_RX_PCNT_MIN_PCNT_MASK	GENMASK(3, 0)
+-- 
+2.34.1
+

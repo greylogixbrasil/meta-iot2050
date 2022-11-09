@@ -1,7 +1,7 @@
-From 349313a3c6e898066e6c57ddae9b2008117a1acd Mon Sep 17 00:00:00 2001
+From 793c63ed01c83573c61caaa180ce9a10c366d57d Mon Sep 17 00:00:00 2001
 From: Suman Anna <s-anna@ti.com>
 Date: Fri, 26 Mar 2021 16:38:11 -0500
-Subject: [PATCH 067/121] soc: ti: pruss: Add helper function to enable OCP
+Subject: [PATCH 067/150] soc: ti: pruss: Add helper function to enable OCP
  master ports
 
 The PRU-ICSS subsystem on OMAP-architecture based SoCS (AM33xx, AM437x
@@ -154,10 +154,10 @@ index 8841d85a0a0d..1254495b7c45 100644
  	{ .compatible = "ti,am654-icssg", .data = &am65x_j721e_pruss_data, },
  	{ .compatible = "ti,j721e-icssg", .data = &am65x_j721e_pruss_data, },
 diff --git a/include/linux/pruss.h b/include/linux/pruss.h
-index ba5b728d5015..5fdd6f03446d 100644
+index b80b882a9527..9edaf9116d9e 100644
 --- a/include/linux/pruss.h
 +++ b/include/linux/pruss.h
-@@ -163,6 +163,7 @@ int pruss_release_mem_region(struct pruss *pruss,
+@@ -161,6 +161,7 @@ int pruss_release_mem_region(struct pruss *pruss,
  int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val);
  int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
  		     unsigned int mask, unsigned int val);
@@ -165,7 +165,7 @@ index ba5b728d5015..5fdd6f03446d 100644
  
  #else
  
-@@ -198,6 +199,11 @@ static inline int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+@@ -196,6 +197,11 @@ static inline int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
  	return -EOPNOTSUPP;
  }
  
@@ -178,5 +178,5 @@ index ba5b728d5015..5fdd6f03446d 100644
  
  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
 -- 
-2.35.3
+2.34.1
 

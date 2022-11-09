@@ -1,7 +1,7 @@
-From c00ef0f316a27f3bfff01a1685fe607a5ebd12c2 Mon Sep 17 00:00:00 2001
+From a22873abe3afb744411bfcf8dcad8b4321955cf3 Mon Sep 17 00:00:00 2001
 From: Tero Kristo <t-kristo@ti.com>
 Date: Fri, 26 Mar 2021 15:58:00 -0500
-Subject: [PATCH 063/121] soc: ti: pruss: Add pruss_get()/put() API
+Subject: [PATCH 063/150] soc: ti: pruss: Add pruss_get()/put() API
 
 Add two new get and put API, pruss_get() and pruss_put() to the
 PRUSS platform driver to allow client drivers to request a handle
@@ -20,9 +20,8 @@ Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
 Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
 ---
  drivers/soc/ti/pruss.c       | 60 +++++++++++++++++++++++++++++++++++-
- include/linux/pruss.h        | 19 ++++++++++++
  include/linux/pruss_driver.h |  3 +-
- 3 files changed, 80 insertions(+), 2 deletions(-)
+ 2 files changed, 61 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
 index afc8aae68035..d08adff52094 100644
@@ -112,49 +111,6 @@ index afc8aae68035..d08adff52094 100644
  static void pruss_of_free_clk_provider(void *data)
  {
  	struct device_node *clk_mux_np = data;
-diff --git a/include/linux/pruss.h b/include/linux/pruss.h
-index e1740ff06962..2e1f519255b9 100644
---- a/include/linux/pruss.h
-+++ b/include/linux/pruss.h
-@@ -4,12 +4,14 @@
-  *
-  * Copyright (C) 2015-2021 Texas Instruments Incorporated - https://www.ti.com
-  *	Suman Anna <s-anna@ti.com>
-+ *	Tero Kristo <t-kristo@ti.com>
-  */
- 
- #ifndef __LINUX_PRUSS_H
- #define __LINUX_PRUSS_H
- 
- #include <linux/device.h>
-+#include <linux/err.h>
- #include <linux/types.h>
- 
- #define PRU_RPROC_DRVNAME "pru-rproc"
-@@ -39,6 +41,23 @@ enum pru_ctable_idx {
- 
- struct device_node;
- struct rproc;
-+struct pruss;
-+
-+#if IS_ENABLED(CONFIG_TI_PRUSS)
-+
-+struct pruss *pruss_get(struct rproc *rproc);
-+void pruss_put(struct pruss *pruss);
-+
-+#else
-+
-+static inline struct pruss *pruss_get(struct rproc *rproc)
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
-+
-+static inline void pruss_put(struct pruss *pruss) { }
-+
-+#endif /* CONFIG_TI_PRUSS */
- 
- #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
- 
 diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
 index ecfded30ed05..4d1321f0d326 100644
 --- a/include/linux/pruss_driver.h
@@ -176,5 +132,5 @@ index ecfded30ed05..4d1321f0d326 100644
  
  /*
 -- 
-2.35.3
+2.34.1
 
