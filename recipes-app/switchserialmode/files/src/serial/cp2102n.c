@@ -335,5 +335,5 @@ serial_ops_t cp210x_ops = {
     .getMode = cp2102n_print_mode,
     .rs485HoldTime = cp2102n_set_rs485_hold_time,
     .rs485SetupTime = cp2102n_set_rs485_setup_time,
-    .release = cp2102n_release,
+    .release = cp2102n_release,,
 };
