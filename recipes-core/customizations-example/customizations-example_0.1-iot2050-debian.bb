@@ -26,7 +26,9 @@ SRC_URI = " \
     file://cellular-4g \
     file://eno1-default \
     file://20-assign-ethernet-names.rules \
-    file://20-create-symbolic-link-for-serial-port.rules"
+    file://20-create-symbolic-link-for-serial-port.rules \
+    file://autosize-console \
+    file://autosize.sh"
 
 do_install() {
     # add board status led service
@@ -56,4 +58,8 @@ do_install() {
     install -v -m 644 ${WORKDIR}/20-assign-ethernet-names.rules ${D}/etc/udev/rules.d/
     # create a symbolic link for serial port
     install -v -m 644 ${WORKDIR}/20-create-symbolic-link-for-serial-port.rules ${D}/etc/udev/rules.d/
+
+    install -v -d ${D}/usr/bin
+    install -v -m 755 ${WORKDIR}/autosize-console ${D}/usr/bin
+    install -v -m 755 ${WORKDIR}/autosize.sh      ${D}/etc/profile.d
 }
