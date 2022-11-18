@@ -22,6 +22,7 @@ extern serial_ops_t ttyuart_ops;
 extern serial_ops_t cp210x_ops;
 extern transceiver_ops_t sp339e_ops;
 platform_t *curr_platform = NULL;
+controller_setting_t default_setting = {5 ,5};
 
 boardType_e get_board_type(void)
 {
@@ -79,6 +80,7 @@ static void init_ops(void)
     if (get_board_type()) {
         curr_platform->serOps = &cp210x_ops;
         curr_platform->transOps = &sp339e_ops;;
+        curr_platform->privata_data = (controller_setting_t*)&default_setting;
     }
     else {
         curr_platform->serOps = &ttyuart_ops;
@@ -136,6 +138,8 @@ int main(int argc, char **argv)
         curr_platform->serOps->getMode();
         goto release;
     }
+
+    curr_platform->serOps->preProcess(curr_platform);
 
     if (NULL != mode) {
         curr_platform->serOps->setMode(mode);
