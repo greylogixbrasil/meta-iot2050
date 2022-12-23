@@ -272,6 +272,42 @@ class FirmwareUpdate(object):
         if firmware_md5_digest != firmware_flash_md5_digest:
             raise UpgradeError("Firmware digest verification failed")
 
+    def backup_rollback_firmware(self, firmware_len=0x8c0000,
+                                 path='/root/.rollback_fw/'):
+        try:
+            if not os.path.exists(path):
+                os.mkdir(path)
+        except OSError:
+            raise UpgradeError("Create rollback firmware folder falied")
+
+        rollback_fw = path + 'iot2050-image-boot.bin'
+
+        mtd_num = 0
+        with open(rollback_fw, mode='w+b') as output:
+            while True:
+                if firmware_len <= 0:
+                    break
+
+                mtd_dev_path, mtd_size, mtd_erasesize, mtd_name = self.get_mtd_info(
+                    mtd_num)
+
+                mtd_pos = 0
+                try:
+                    mtd_dev = os.open(mtd_dev_path, os.O_SYNC | os.O_RDWR)
+                except IOError as e:
+                    raise UpgradeError("Opening {} failed: {}".format(mtd_dev_path, e.strerror))
+
+                while mtd_pos < mtd_size and firmware_len > 0:
+                    mtd_content = os.read(mtd_dev, mtd_erasesize)
+                    mtd_pos += mtd_erasesize
+                    firmware_len -= mtd_erasesize
+                    output.write(mtd_content)
+                    output.flush()
+
+                os.close(mtd_dev)
+
+                mtd_num += 1
+
 
 class BoardInformation(object):
     def __init__(self):
@@ -581,6 +617,7 @@ def main(argv):
         if not args.force and not args.reset:
             envlist = updater.get_preserved_uboot_env(args.preserve_list)
 
+        updater.backup_rollback_firmware()
         updater.update_firmware()
 
         if envlist:
@@ -601,6 +638,17 @@ def main(argv):
         ====================================
 Hit any Key to Exit:
         '''
+        # Rollback the firmware when the upgrade fails
+        try:
+            with open('/root/.rollback_fw/iot2050-image-boot.bin', 'rb') as f:
+                print("Rollback to the previous firmware")
+                updater = FirmwareUpdate(f)
+                updater.update_firmware()
+        except (IOError, UpgradeError):
+            print("**********************************")
+            print("Rollback firmware fails")
+            print("**********************************")
+
         input(intput_reminder)
         sys.exit(1)
 
