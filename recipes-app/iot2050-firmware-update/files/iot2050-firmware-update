@@ -272,41 +272,64 @@ class FirmwareUpdate(object):
         if firmware_md5_digest != firmware_flash_md5_digest:
             raise UpgradeError("Firmware digest verification failed")
 
-    def backup_rollback_firmware(self, firmware_len=0x8c0000,
-                                 path='/root/.rollback_fw/'):
+    def backup_rollback_firmware(self, firmware_len=0x8c0000):
+        user_home = os.getenv('HOME')
+        fw_backup_path = user_home + "/.rollback_fw/"
         try:
-            if not os.path.exists(path):
-                os.mkdir(path)
+            if not os.path.exists(fw_backup_path):
+                os.mkdir(fw_backup_path)
         except OSError:
             raise UpgradeError("Create rollback firmware folder falied")
 
-        rollback_fw = path + 'iot2050-image-boot.bin'
-
+        # rollback_fw = fw_backup_path + 'iot2050-image-boot.bin'
+        rollback_fw = fw_backup_path + 'iot2050-image-boot.tar'
+        
         mtd_num = 0
-        with open(rollback_fw, mode='w+b') as output:
-            while True:
-                if firmware_len <= 0:
-                    break
+        mtd_in_memory = b''
 
-                mtd_dev_path, mtd_size, mtd_erasesize, mtd_name = self.get_mtd_info(
-                    mtd_num)
+        while True:
+            if firmware_len <= 0:
+                break
 
-                mtd_pos = 0
-                try:
-                    mtd_dev = os.open(mtd_dev_path, os.O_SYNC | os.O_RDWR)
-                except IOError as e:
-                    raise UpgradeError("Opening {} failed: {}".format(mtd_dev_path, e.strerror))
+            mtd_dev_path, mtd_size, mtd_erasesize, mtd_name = self.get_mtd_info(
+                mtd_num)
 
-                while mtd_pos < mtd_size and firmware_len > 0:
-                    mtd_content = os.read(mtd_dev, mtd_erasesize)
-                    mtd_pos += mtd_erasesize
-                    firmware_len -= mtd_erasesize
-                    output.write(mtd_content)
-                    output.flush()
+            mtd_pos = 0
+            try:
+                mtd_dev = os.open(mtd_dev_path, os.O_SYNC | os.O_RDWR)
+            except IOError as e:
+                raise UpgradeError("Opening {} failed: {}".format(mtd_dev_path, e.strerror))
 
-                os.close(mtd_dev)
+            while mtd_pos < mtd_size and firmware_len > 0:
+                mtd_content = os.read(mtd_dev, mtd_erasesize)
+                # mtd_content_second = os.read(mtd_dev, mtd_erasesize)
 
-                mtd_num += 1
+                # if mtd_content == mtd_content_second:
+                #     print('Backup firmware failed')
+                #     sys.exit(1)
+                mtd_pos += mtd_erasesize
+                firmware_len -= mtd_erasesize
+
+                mtd_in_memory += mtd_content
+
+            os.close(mtd_dev)
+            mtd_num += 1    
+
+        import io
+        info = tarfile.TarInfo(name='iot2050-firmwarew-backup.bin')
+        info.size = len(mtd_in_memory)
+        with tarfile.TarFile(rollback_fw, 'w') as tar:
+            tar.addfile(info, io.BytesIO(mtd_in_memory))
+        # fileobj = io.BytesIO(mtd_in_memory)
+        # tar = tarfile.open(mode = "w:gz", fileobj=fileobj)
+        # info = tarfile.TarInfo(name="firmware.bin")
+        # info.size = len(mtd_in_memory)l
+        # print(info.size)
+        # tar.addfile(tarinfo=info, fileobj=fileobj)
+        # # tar.close()
+        # with tarfile.open(fw_backup_path + 'firmware.tar','w') as f:
+        #     for file in os.listdir(fw_backup_path):
+        #         f.add(file)
 
 
 class BoardInformation(object):
