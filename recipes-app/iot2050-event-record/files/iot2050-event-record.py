@@ -133,17 +133,33 @@ def record_eio_events():
             write_event(EVENT_TYPES["eio"], event)
         time.sleep(5)
 
-IIO_ACCEL_X_RAW = "/sys/bus/iio/devices/iio:device2/in_accel_x_raw"
-IIO_ACCEL_Y_RAW = "/sys/bus/iio/devices/iio:device2/in_accel_y_raw"
-IIO_ACCEL_Z_RAW = "/sys/bus/iio/devices/iio:device2/in_accel_z_raw"
-IIO_LUX_RAW = "/sys/bus/iio/devices/iio:device0/in_illuminance0_raw"
+
+
+IIO_IMU_PATH = "/sys/devices/platform/bus@100000/2030000.i2c/i2c-5/5-006a/"
+IIO_LUX_PATH = "/sys/devices/platform/bus@100000/2030000.i2c/i2c-5/5-0044/"
 ACCEL_CRITICAL_VALUE = 1000
 LUX_CRITICAL_VALUE = 300
 def record_sensor_events():
-    with open(IIO_ACCEL_X_RAW, 'r') as x, \
-        open(IIO_ACCEL_Y_RAW, 'r') as y, \
-        open(IIO_ACCEL_Z_RAW, 'r') as z, \
-        open(IIO_LUX_RAW, 'r') as l:
+    accel_x_raw = "{}/in_accel_x_raw"
+    accel_y_raw = "{}/in_accel_y_raw"
+    accel_z_raw = "{}/in_accel_z_raw"
+    lux_raw = "{}/in_illuminance0_raw"
+    imu_w = os.walk(IIO_IMU_PATH)
+    lux_w = os.walk(IIO_LUX_PATH)
+    for (dirpath, dirnames, filenames) in imu_w:
+        if "in_accel_x_raw" in filenames:
+            accel_x_raw = accel_x_raw.format(dirpath)
+            accel_y_raw = accel_y_raw.format(dirpath)
+            accel_z_raw = accel_z_raw.format(dirpath)
+            break
+    for (dirpath, dirnames, filenames) in lux_w:
+        if "in_illuminance0_raw" in filenames:
+            lux_raw = lux_raw.format(dirpath)
+            break
+    with open(accel_x_raw, 'r') as x, \
+        open(accel_y_raw, 'r') as y, \
+        open(accel_z_raw, 'r') as z, \
+        open(lux_raw, 'r') as l:
         is_uncovered = False
         while True:
             # Detect tilt sensor event
