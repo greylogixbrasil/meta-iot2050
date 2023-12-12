@@ -1019,7 +1019,7 @@ def main(argv):
                 if index > 2:
                     raise UpgradeError(e.err, e.code)
                 index += 1
-                print("Failed to upgrade, try again!")
+                print("{}, try again!".format(e.err))
     except UpgradeError as e:
         print(e.err)
         input_reminder = '''
