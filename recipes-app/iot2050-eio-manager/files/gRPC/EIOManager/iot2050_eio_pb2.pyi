@@ -49,12 +49,12 @@ class SyncTimeReply(_message.Message):
     def __init__(self, status: _Optional[int] = ..., message: _Optional[str] = ...) -> None: ...
 
 class UpdateFirmwareRequest(_message.Message):
-    __slots__ = ["entity", "firmware"]
-    ENTITY_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ["firmware", "firmware_type"]
     FIRMWARE_FIELD_NUMBER: _ClassVar[int]
-    entity: int
-    firmware: str
-    def __init__(self, entity: _Optional[int] = ..., firmware: _Optional[str] = ...) -> None: ...
+    FIRMWARE_TYPE_FIELD_NUMBER: _ClassVar[int]
+    firmware: bytes
+    firmware_type: str
+    def __init__(self, firmware: _Optional[bytes] = ..., firmware_type: _Optional[str] = ...) -> None: ...
 
 class UpdateFirmwareReply(_message.Message):
     __slots__ = ["status", "message"]
