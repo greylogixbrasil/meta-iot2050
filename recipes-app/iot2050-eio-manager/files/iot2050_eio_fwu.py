@@ -15,6 +15,7 @@ import gpiod
 from iot2050_eio_global import (
     EIO_FS_FW_VER,
     EIO_FWU_META,
+    EIO_MODULE_PATH,
     EIO_FWU_MAP3_FW_BIN
 )
 
@@ -129,6 +130,19 @@ class EIOFirmware():
             self.flash_prog.release()
 
 
+class ModuleFirmware():
+    def __init__(self, firmware, firmware_type):
+        self.firmware = firmware
+        self.firmware_target = EIO_MODULE_PATH + firmware_type
+
+    def write(self):
+        with open(self.firmware_target, "wb") as f:
+            try:
+                f.write(self.firmware)
+            except OSError as e:
+                raise UpgradeError(f"ModuleFirmware writes failed: {e}")
+
+
 class FirmwareUpdate():
     """
     The FirmwareUpdate models the firmware updating behavior for all
@@ -139,6 +153,9 @@ class FirmwareUpdate():
         self.to_verify = True
         if "map3" == firmware_type:
             self.firmwares[firmware_type] = EIOFirmware(firmware)
+        if "slot" in firmware_type:
+            self.firmwares[firmware_type] = ModuleFirmware(firmware, firmware_type)
+            self.to_verify = False
 
         if not self.firmwares:
             raise UpgradeError("No valid firmware!")

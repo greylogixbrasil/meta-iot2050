@@ -29,6 +29,9 @@ default_conf = {
     # Extended IO FUSE filesystem path for eio events
     'EIO_FS_EVENT': '/eiofs/log/event',
 
+    # Extended IO FUSE filesystem path for modules
+    'EIO_MODULE_PATH': '/eiofs/controller/',
+
     # EIO Firmware Update: Meta data
     'EIO_FWU_META': '/usr/lib/iot2050/eio/firmware-version',
 
@@ -57,6 +60,7 @@ EIO_FS_CONTROL = effective_conf['EIO_FS_CONTROL']
 EIO_FS_CONFIG = effective_conf['EIO_FS_CONFIG']
 EIO_FS_FW_VER = effective_conf['EIO_FS_FW_VER']
 EIO_FS_EVENT = effective_conf['EIO_FS_EVENT']
+EIO_MODULE_PATH = effective_conf['EIO_MODULE_PATH']
 EIO_FWU_META = effective_conf['EIO_FWU_META']
 EIO_FWU_MAP3_FW_BIN = effective_conf['EIO_FWU_MAP3_FW_BIN']
 EIO_SCHEMA_ROOT = effective_conf['EIO_SCHEMA_ROOT']

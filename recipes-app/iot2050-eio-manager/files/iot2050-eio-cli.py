@@ -89,6 +89,8 @@ if __name__ == "__main__":
         3. %(prog)s fwu controller [firmware.bin]
             Update firmware for Extended IO Controller, using firmware.bin if provided,
             otherwise using the stock firmware file.
+        3. %(prog)s fwu module -s 1 -fwa fwa.bin
+            Update firmware a of the module in slot 1
 
         Example Configuration File:
 
@@ -120,6 +122,20 @@ if __name__ == "__main__":
     controller_parser.add_argument('firmware', nargs='?', metavar='FIRMWARE',
                                    type=argparse.FileType('rb'),
                                    help='Firmware file')
+    module_parser = fwu_subparsers.add_parser("module", help='module help')
+    module_parser.add_argument('firmware', nargs='?', metavar='FIRMWARE',
+                                   type=argparse.FileType('rb'),
+                                   help='Firmware file')
+    module_parser.add_argument('-s', '--slot',
+                               help='Specify the slot number',
+                               nargs=1)
+    group = module_parser.add_mutually_exclusive_group()
+    group.add_argument('-fwa', '--firmware-a',
+                       help='Update firmware a of module',
+                       action='store_true')
+    group.add_argument('-fwb', '--firmware-b',
+                       help='Update firmware b of module',
+                       action='store_true')
 
     args = parser.parse_args()
 
@@ -157,12 +173,26 @@ if __name__ == "__main__":
                     sys.exit(0)
 
             response = do_update_firmware(firmware, "map3")
+        elif args.fwu_command == 'module':
+            if not args.slot or \
+                (not args.firmware_a and not args.firmware_b):
+                module_parser.print_help(sys.stderr)
+                sys.exit(1)
+            if args.firmware_a:
+                firmware_type = f'slot{args.slot[0]}/fwa'
+            elif args.firmware_b:
+                firmware_type = f'slot{args.slot[0]}/fwb'
+            firmware = args.firmware.read()
+            response = do_update_firmware(firmware, firmware_type)
+
         if response.status:
             print(f"ERROR: {response.message}")
-            print("EIO firmware update failed, please try again!")
+            print(f"EIO {args.fwu_command} firmware update failed, please try again!")
             sys.exit(1)
 
-        print("EIO firmware update completed. Please reboot the device.")
+        print(f"EIO {args.fwu_command} firmware update completed."
+              f" Please reboot the {args.fwu_command}!")
     else:
         parser.print_help(sys.stderr)
         sys.exit(1)
+
