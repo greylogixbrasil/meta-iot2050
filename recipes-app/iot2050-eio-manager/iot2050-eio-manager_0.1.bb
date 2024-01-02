@@ -43,8 +43,16 @@ SRC_URI += " \
     file://config-template/mlfb-NA.yaml \
     "
 
+# Firmware update
+SRC_URI += " \
+    file://bin/map3-fw.bin \
+    file://bin/firmware-version \
+    file://iot2050_eio_fwu.py \
+    "
+
 DEBIAN_DEPENDS = "python3, python3-grpcio, python3-dotenv, python3-jsonschema, \
-python3-yaml, python3-bitstruct,"
+python3-yaml, python3-bitstruct, python3-libgpiod, libflashrom1, libflashrom-dev, \
+python3-progress,"
 
 do_install() {
     install -v -d ${D}/usr/lib/
@@ -63,6 +71,7 @@ do_install() {
     install -v -m 755 ${WORKDIR}/iot2050-eio-service.py ${D}/usr/lib/iot2050/eio/
     install -v -m 755 ${WORKDIR}/iot2050-eio-time-syncing.py ${D}/usr/lib/iot2050/eio/
     install -v -m 755 ${WORKDIR}/iot2050-eio-cli.py ${D}/usr/lib/iot2050/eio/
+    install -v -m 755 ${WORKDIR}/iot2050_eio_fwu.py ${D}/usr/lib/iot2050/eio/
 
     install -v -d ${D}/usr/lib/iot2050/eio/schema
     install -v -d ${D}/usr/lib/iot2050/eio/config-template
@@ -87,6 +96,8 @@ do_install() {
 
     install -v -d ${D}/usr/bin/
     install -v -m 755 ${WORKDIR}/bin/iot2050-eiofsd ${D}/usr/bin/
+    install -v -m 755 ${WORKDIR}/bin/map3-fw.bin ${D}/usr/lib/iot2050/eio/
+    install -v -m 755 ${WORKDIR}/bin/firmware-version ${D}/usr/lib/iot2050/eio/
     ln -sf ../lib/iot2050/eio/iot2050-eio-time-syncing.py ${D}/usr/bin/iot2050-eio-time-syncing
     ln -sf ../lib/iot2050/eio/iot2050-eio-service.py ${D}/usr/bin/iot2050-eio-service
     ln -sf ../lib/iot2050/eio/iot2050-eio-cli.py ${D}/usr/bin/iot2050-eio
