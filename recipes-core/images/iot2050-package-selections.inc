@@ -97,3 +97,12 @@ IOT2050_DEBIAN_DOCKER_PACKAGES = " \
     docker.io \
     docker-compose \
     "
+
+# greylogix packages
+IOT2050_DEBIAN_GLX_PACKAGES = " \
+    ntp \
+    nmap \
+    tcpdump \
+    vnstat \
+    git \
+    "
