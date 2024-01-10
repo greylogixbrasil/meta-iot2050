@@ -1,5 +1,5 @@
 build/
 isar/
 /cip-core
-# recipes-core/customizations-base/local.inc
+recipes-core/customizations-base/local.inc
 .config.yaml*
