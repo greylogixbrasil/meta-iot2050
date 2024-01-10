@@ -55,7 +55,6 @@ IOT2050_DEBIAN_DEBUG_PACKAGES = " \
     i2c-tools \
     sudo \
     usb-modeswitch \
-    systemd-timesyncd \
     efitools \
     mmc-utils \
     "
