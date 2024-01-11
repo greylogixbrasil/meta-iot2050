@@ -45,8 +45,6 @@ IOT2050_DEBIAN_DEBUG_PACKAGES = " \
     autoconf \
     autotools-dev \
     default-jdk \
-    mosquitto \
-    mosquitto-clients \
     nodejs \
     npm \
     teamd \
