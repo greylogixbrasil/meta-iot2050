@@ -99,7 +99,7 @@ IOT2050_DEBIAN_DOCKER_PACKAGES = " \
 IOT2050_DEBIAN_GLX_PACKAGES = " \
     git \
     nmap \
-    ntpsec \
+    ntp \
     tcpdump \
     vnstat \
     "
