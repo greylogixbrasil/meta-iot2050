@@ -42,6 +42,7 @@ IMAGE_INSTALL += " \
     libteec1 \
     optee-client-dev \
     tee-supplicant \
+    qbee-agent \
     "
 
 IOT2050_NODE_RED_SUPPORT ?= "0"

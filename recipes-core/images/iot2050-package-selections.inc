@@ -91,8 +91,11 @@ IOT2050_DEBIAN_MULTIARCH_PACKAGES = " \
 
 # docker support
 IOT2050_DEBIAN_DOCKER_PACKAGES = " \
-    docker.io \
-    docker-compose \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin \
     "
 
 # greylogix packages
