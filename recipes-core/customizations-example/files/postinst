@@ -26,6 +26,10 @@ systemctl enable status-led.service
 mv /root /home/
 ln -s /home/root /root
 
+# change logrotate
+sed -i -e 's/rotate 4/rotate 2/g' /etc/logrotate.d/rsyslog
+sed -i -e 's/weekly/daily/g' /etc/logrotate.d/rsyslog
+
 # replace ntp original conf
 mv /etc/ntpsec/ntp.conf.new /etc/ntpsec/ntp.conf
 

@@ -9,6 +9,5 @@
 #
 
 part / --source rootfs-u-boot --sourceparams "no_initrd=yes" --fstype ext4 --label rootfs --align 1024 --use-uuid
-part /var --source rootfs --rootfs-dir=${IMAGE_ROOTFS}/var --label var --fstype=ext4 --mkfs-extraopts "-T default" --align 1024  --size 512M
 
 bootloader --ptable gpt --append "console=ttyS3,115200n8 earlycon=ns16550a,mmio32,0x02810000 rootwait ${EXTRA_KERNEL_PARAMS}"

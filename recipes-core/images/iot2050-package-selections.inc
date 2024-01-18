@@ -100,7 +100,9 @@ IOT2050_DEBIAN_DOCKER_PACKAGES = " \
 
 # greylogix packages
 IOT2050_DEBIAN_GLX_PACKAGES = " \
+    cron \
     git \
+    logrotate \
     nmap \
     ntp \
     tcpdump \
