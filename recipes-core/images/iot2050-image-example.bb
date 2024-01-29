@@ -51,8 +51,6 @@ IOT2050_DEBIAN_DEBUG_PACKAGES = " \
     autoconf \
     autotools-dev \
     default-jdk \
-    mosquitto \
-    mosquitto-clients \
     nodejs \
     npm \
     teamd \
@@ -95,12 +93,28 @@ IOT2050_DEBIAN_MULTIARCH_PACKAGES = " \
     libstdc++6:armhf \
     "
 
+IOT2050_DEBIAN_GLX_PACKAGES = " \
+    cron \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin \
+    git \
+    logrotate \
+    nmap \
+    ntp \
+    tcpdump \
+    vnstat \
+    "
+
 IMAGE_PREINSTALL += " \
     ${IOT2050_DEBIAN_DEBUG_PACKAGES} \
     ${IOT2050_DEBIAN_WIFI_PACKAGES} \
     ${IOT2050_DEBIAN_BT_PACKAGES} \
     ${IOT2050_DEBIAN_ALSA_PACKAGES} \
     ${IOT2050_DEBIAN_MULTIARCH_PACKAGES} \
+    ${IOT2050_DEBIAN_GLX_PACKAGES} \
     "
 
 IMAGE_INSTALL += " \
@@ -114,12 +128,10 @@ IMAGE_INSTALL += " \
     iot2050-firmware-update \
     tcf-agent \
     mraa \
-    node-red \
-    node-red-gpio \
-    node-red-preinstalled-nodes \
+    qbee-agent \
     "
 
-IOT2050_CORAL_SUPPORT ?= "1"
+IOT2050_CORAL_SUPPORT ?= "0"
 
 IMAGE_INSTALL += "${@ ' \
     python3-pycoral \

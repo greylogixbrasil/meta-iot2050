@@ -31,3 +31,18 @@ passwd --expire root
 # Relocate /root under /home
 mv /root /home/
 ln -s /home/root /root
+
+# change logrotate
+sed -i -e 's/rotate 4/rotate 2/g' /etc/logrotate.d/rsyslog
+sed -i -e 's/weekly/daily/g' /etc/logrotate.d/rsyslog
+
+# replace ntp original conf
+mv /etc/ntpsec/ntp.conf.new /etc/ntpsec/ntp.conf
+
+# append nameservers to resolvconf head
+echo "
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+nameserver 208.67.222.222
+nameserver 208.67.220.220
+" >> ${D}/etc/resolvconf/resolv.conf.d/head

@@ -7,11 +7,15 @@ autoconnect=true
 autoconnect-retries=0
 
 [gsm]
-apn=ctnet
+apn=korexd.br
+username=kore
+password=kore
 number=*99#
 
 [ipv4]
-dns-search=
+dns=8.8.8.8;8.8.4.4;208.67.222.222;208.67.220.220
+dns-search=google.com;dns.opendns.com
+ignore-auto-dns=true
 method=auto
 
 [ipv6]
