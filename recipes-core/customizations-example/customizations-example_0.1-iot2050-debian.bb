@@ -14,7 +14,7 @@ DESCRIPTION = "IOT2050 reference image customizations example"
 
 # The bluez and pulseaudio-module-bluetooth must be install before this package,
 # that's because the 'passwd --expire root' command in the 'postinst' file
-DEBIAN_DEPENDS = "openssh-server, bluez, pulseaudio-module-bluetooth, logrotate, ntp, resolvconf"
+DEBIAN_DEPENDS = "openssh-server, bluez, pulseaudio-module-bluetooth, logrotate, ntp, resolvconf, ssh, docker-ce, docker-ce-cli"
 
 SRC_URI = " \
     file://status-led.service \
@@ -26,7 +26,8 @@ SRC_URI = " \
     file://cellular-4g \
     file://eno1-default \
     file://20-assign-ethernet-names.rules \
-    file://ntp.conf.new"
+    file://ntp.conf.new \
+    file://iot.conf"
 
 do_install() {
     # add board status led service
@@ -58,4 +59,9 @@ do_install() {
     # install ntp.conf.new
     install -v -d ${D}/etc/ntpsec/
     install -v -m 644 ${WORKDIR}/ntp.conf.new ${D}/etc/ntpsec
+
+    # install ssh files
+    install -v -d ${D}/etc/ssh/repos/
+    install -v -d ${D}/etc/ssh/ssh_config.d/
+    install -v -m 644 ${WORKDIR}/iot.conf ${D}/etc/ssh/ssh_config.d
 }
