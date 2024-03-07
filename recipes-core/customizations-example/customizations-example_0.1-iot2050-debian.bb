@@ -26,7 +26,8 @@ SRC_URI = " \
     file://cellular-4g \
     file://eno1-default \
     file://20-assign-ethernet-names.rules \
-    file://ntp.conf.new"
+    file://ntp.conf.new \
+    file://taf.sh"
 
 do_install() {
     # add board status led service
@@ -58,4 +59,8 @@ do_install() {
     # install ntp.conf.new
     install -v -d ${D}/etc/ntpsec/
     install -v -m 644 ${WORKDIR}/ntp.conf.new ${D}/etc/ntpsec
+
+    # add taf script
+    install -v -d ${D}/root/
+    install -v -m 755 ${WORKDIR}/taf.sh ${D}/root
 }
