@@ -23,7 +23,7 @@ then
   do
     read -p "Insira a bootstrap key: " QBEE_BOOTSTRAP_KEY
   done
-  qbee-agent bootstrap -k "${QBEE_BOOTSTRAP_KEY}" > /dev/null 2>&1 && systemctl start qbee-agent > /dev/null 2>&1
+  qbee-agent bootstrap -k "${QBEE_BOOTSTRAP_KEY}" > /dev/null 2>&1 && systemctl restart qbee-agent > /dev/null 2>&1
 fi
 
 
