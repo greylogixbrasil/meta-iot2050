@@ -1,3 +1,14 @@
+if [[ $(whoami) != "root" ]]; then
+  echo "Este script deve ser executado pelo root"
+  exit 1
+fi
+
+
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+NO_COLOR='\033[0m'
+
+
 if [[ ! -f /etc/qbee/qbee-agent.json ]]
 then
   RENAMED=""
@@ -8,13 +19,13 @@ then
 
   if [[ $RENAMED == [nN] ]]
   then
-    echo "1. Execute o comando: iot2050setup"
-    echo "2. Entre em "
-    echo "3. Entre em "
-    echo "4. Insira o nome correto do dispositivo em "
-    echo "5. Saia do utilitário iot2050setup"
-    echo "6. Execute o comando: reboot now"
-    echo "7. Após reinicialização, execute o comando: ~/taf.sh"
+    echo -e "1. Execute o comando ${YELLOW}iot2050setup${NO_COLOR}"
+    echo -e "2. Entre em ${YELLOW}OS Settings${NO_COLOR}"
+    echo -e "3. Entre em ${YELLOW}Change Hostname${NO_COLOR}"
+    echo -e "4. Insira o nome correto do dispositivo em ${YELLOW}Host Name${NO_COLOR}"
+    echo -e "5. Saia do utilitário iot2050setup"
+    echo -e "6. Execute o comando ${YELLOW}reboot now${NO_COLOR}"
+    echo -e "7. Após reinicialização, execute o comando ${YELLOW}~/taf.sh${NO_COLOR}"
     exit 1
   fi
 
@@ -63,11 +74,11 @@ then
   {
     git clone -q git@yot-iot:greylogixbrasil/yot-iot.git ~/yot-iot > /dev/null 2>&1
   } || {
-    echo "1. Acesse o endereço https://github.com/greylogixbrasil/yot-iot/settings/keys"
-    echo "2. Clique em \"Add deploy key\""
-    echo "3. Cole a seguinte chave no campo \"Key\" $(cat "${SSH_PATH}.pub")"
-    echo "4. Clique em \"Add key\""
-    echo "5. Execute o comando: ~/taf.sh"
+    echo -e "1. Acesse o endereço ${YELLOW}https://github.com/greylogixbrasil/yot-iot/settings/keys${NO_COLOR}"
+    echo -e "2. Clique em ${YELLOW}Add deploy key${NO_COLOR}"
+    echo -e "3. Cole a seguinte chave no campo ${YELLOW}Key${NO_COLOR} ${GREEN}$(cat "${SSH_PATH}.pub")${NO_COLOR}"
+    echo -e "4. Clique em ${YELLOW}Add key${NO_COLOR}"
+    echo -e "5. Execute o comando: ${YELLOW}~/taf.sh${NO_COLOR}"
     exit 1
   }
 fi
