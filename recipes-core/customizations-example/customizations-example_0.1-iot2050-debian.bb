@@ -27,6 +27,7 @@ SRC_URI = " \
     file://eno1-default \
     file://20-assign-ethernet-names.rules \
     file://ntp.conf.new \
+    file://override.conf \
     file://taf.sh"
 
 do_install() {
@@ -63,4 +64,8 @@ do_install() {
     # add taf script
     install -v -d ${D}/root/
     install -v -m 755 ${WORKDIR}/taf.sh ${D}/root
+
+    # add logrotate.timer service override
+    install -v -d ${D}/etc/systemd/system/logrotate.timer.d/
+    install -v -m 644 ${WORKDIR}/override.conf ${D}/etc/systemd/system/logrotate.timer.d
 }
