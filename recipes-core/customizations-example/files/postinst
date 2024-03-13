@@ -33,9 +33,8 @@ mv /root /home/
 ln -s /home/root /root
 
 # change logrotate
-sed -i -e 's/rotate 4/rotate 2/g' /etc/logrotate.d/rsyslog
-sed -i -e 's/weekly/daily/g' /etc/logrotate.d/rsyslog
-sed -i -e '/daily/a\        size 100M' /etc/logrotate.d/rsyslog
+sed -i -e 's/rotate 4/rotate 1/g' /etc/logrotate.d/rsyslog
+sed -i -e '/weekly/a\	size 100M' /etc/logrotate.d/rsyslog
 
 # replace ntp original conf
 mv /etc/ntpsec/ntp.conf.new /etc/ntpsec/ntp.conf
