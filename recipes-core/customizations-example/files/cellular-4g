@@ -13,12 +13,14 @@ password=kore
 number=*99#
 
 [ipv4]
-dns=8.8.8.8;8.8.4.4;208.67.222.222;208.67.220.220
-dns-search=google.com;dns.opendns.com
+dns=8.8.8.8;8.8.4.4
+dns-search=google.com
 ignore-auto-dns=true
 method=auto
 
 [ipv6]
 addr-gen-mode=stable-privacy
-dns-search=
+dns=2001:4860:4860:0:0:0:0:8888;2001:4860:4860:0:0:0:0:8844
+dns-search=google.com
+ignore-auto-dns=true
 method=auto
