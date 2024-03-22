@@ -7,37 +7,6 @@ fi
 GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 NO_COLOR='\033[0m'
-
-
-if [[ ! -f /etc/qbee/qbee-agent.json ]]
-then
-  RENAMED=""
-  while [[ $RENAMED != [sSnN] ]]
-  do
-    read -p "O nome do dispositivo ($(hostname)) está correto (s|n)? " RENAMED
-  done
-
-  if [[ $RENAMED == [nN] ]]
-  then
-    echo -e "1. Execute o comando ${YELLOW}iot2050setup${NO_COLOR}"
-    echo -e "2. Entre em ${YELLOW}OS Settings${NO_COLOR}"
-    echo -e "3. Entre em ${YELLOW}Change Hostname${NO_COLOR}"
-    echo -e "4. Insira o nome correto do dispositivo em ${YELLOW}Host Name${NO_COLOR}"
-    echo -e "5. Saia do utilitário iot2050setup"
-    echo -e "6. Execute o comando ${YELLOW}reboot now${NO_COLOR}"
-    echo -e "7. Após reinicialização, execute o comando ${YELLOW}~/taf.sh${NO_COLOR}"
-    exit 1
-  fi
-
-  QBEE_BOOTSTRAP_KEY=""
-  while [ -z $QBEE_BOOTSTRAP_KEY ]
-  do
-    read -p "Insira a bootstrap key: " QBEE_BOOTSTRAP_KEY
-  done
-  qbee-agent bootstrap -k "${QBEE_BOOTSTRAP_KEY}" > /dev/null 2>&1 && systemctl restart qbee-agent > /dev/null 2>&1
-fi
-
-
 SSH_PATH=/etc/ssh/ssh_config.d/yot-iot
 
 
@@ -69,6 +38,40 @@ then
 fi
 
 
+if [[ ! -f /etc/qbee/qbee-agent.json ]]
+then
+  RENAMED=""
+  while [[ $RENAMED != [sSnN] ]]
+  do
+    read -p "O nome do dispositivo ($(hostname)) está correto (s|n)? " RENAMED
+  done
+
+  if [[ $RENAMED == [nN] ]]
+  then
+    echo -e "1. Execute o comando ${YELLOW}iot2050setup${NO_COLOR}"
+    echo -e "2. Entre em ${YELLOW}OS Settings${NO_COLOR}"
+    echo -e "3. Entre em ${YELLOW}Change Hostname${NO_COLOR}"
+    echo -e "4. Insira o nome correto do dispositivo em ${YELLOW}Host Name${NO_COLOR}"
+    echo -e "5. Saia do utilitário iot2050setup"
+    echo -e "6. Execute o comando ${YELLOW}reboot now${NO_COLOR}"
+    echo -e "7. Após reinicialização, execute o comando ${YELLOW}~/taf.sh${NO_COLOR}"
+    exit 1
+  fi
+
+  QBEE_BOOTSTRAP_KEY=""
+  while [ -z $QBEE_BOOTSTRAP_KEY ]
+  do
+    read -p "Insira a bootstrap key: " QBEE_BOOTSTRAP_KEY
+  done
+  {
+    qbee-agent bootstrap -k "${QBEE_BOOTSTRAP_KEY}" > /dev/null 2>&1 && systemctl restart qbee-agent > /dev/null 2>&1
+  } || {
+    echo -e "Certifique a conexão com a internet."
+    exit 1
+  }
+fi
+
+
 if [ ! -d ~/yot-iot ]
 then
   {
@@ -89,9 +92,6 @@ if [ ! -f .env ]
 then
   cp sample.env .env
 fi
-
-
-chown -R 1000:1000 .node-red
 
 
 docker compose up -d
